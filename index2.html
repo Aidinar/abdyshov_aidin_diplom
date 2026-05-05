@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Sense — семантическая разметка PDF</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header class="top-nav">
+            <div class="top-left">
+                <div class="logo-m" aria-label="Logo letter M"><span>M</span></div>
+                <div>
+                    <div class="main-title">Math Sense</div>
+                </div>
+            </div>
+            <nav class="top-center" aria-label="Main navigation">
+                <a href="#about" class="nav-link">О проекте</a>
+                <a href="#features" class="nav-link">Возможности</a>
+                <a href="#benefits" class="nav-link">Преимущества</a>
+                <a href="#contacts" class="nav-link">Контакты</a>
+            </nav>
+            <div class="top-right">
+                <div class="icon-button" id="themeToggle" role="button" aria-label="Переключить тему" tabindex="0">
+                    <span class="icon" id="themeIcon" aria-hidden="true">🌙</span>
+                </div>
+            </div>
+        </header>
+        <section class="hero-section">
+            <h1 class="hero-title">Math Sense</h1>
+            <p class="hero-subtitle">
+                Сделаем математические PDF-документы понятными, наглядными и доступными для каждого
+            </p>
+        </section>
+
+        <div class="feature-cards">
+            <div class="feature-card-item">
+                <i class="fas fa-file-pdf"></i>
+                <h3>Загрузка PDF</h3>
+                <p>Извлечение текста из математических PDF с сохранением структуры.</p>
+            </div>
+            <div class="feature-card-item">
+                <i class="fas fa-microchip"></i>
+                <h3>Выделение терминов</h3>
+                <p>Автоматическое обнаружение математических понятий по онтологии.</p>
+            </div>
+            <div class="feature-card-item">
+                <i class="fas fa-square-root-variable"></i>
+                <h3>Поиск формул</h3>
+                <p>Идентификация и индексация математических выражений.</p>
+            </div>
+            <div class="feature-card-item">
+                <i class="fas fa-project-diagram"></i>
+                <h3>Связывание данных</h3>
+                <p>Интеграция с онтологией OntoMathPRO и внешними словарями.</p>
+            </div>
+        </div>
+
+        <main>
+            <section class="ovals-section" aria-label="Action options">
+                <div class="oval" role="button" tabindex="0" data-panel="upload" aria-label="Upload PDF document">
+                    <span>Загрузить PDF</span>
+                </div>
+                <div class="oval" role="button" tabindex="0" data-panel="editor" aria-label="Text editor option">
+                    <span>Редактор текста</span>
+                </div>
+            </section>
+
+            <div class="dynamic-panel">
+                <section id="uploadPanel" class="upload-section" aria-label="PDF upload area">
+                    <h2 class="section-title">Начните работу с PDF</h2>
+                    <div class="upload-area">
+                        <div class="upload-icon">📄</div>
+                        <p class="upload-text">Загрузите математический PDF-документ</p>
+                        <p class="upload-subtext">Поддерживается только формат PDF</p>
+                        <button class="upload-button" id="uploadPdfButton"
+                            aria-label="Browse PDF files to upload">Выбрать PDF</button>
+                    </div>
+
+                    <div id="pdfLoadingIndicator" class="loading-indicator hidden">
+                        <div class="spinner"></div>
+                        <p id="pdfProgressText">Обработка PDF...</p>
+                    </div>
+
+                    <div id="pdfResults" class="pdf-results hidden">
+                        <h3 class="results-title">Извлеченный текст из PDF:</h3>
+                        <div class="results-stats">
+                            <span id="pageCount"></span>
+                            <span id="charCount"></span>
+                        </div>
+                        <div class="results-text-container">
+                            <pre id="extractedPdfText" class="results-text"></pre>
+                        </div>
+                        <button class="analyze-pdf-button" id="analyzePdfButton">
+                            Анализировать математические термины
+                        </button>
+                    </div>
+
+                    <div id="pdfAnalysisResults" class="pdf-analysis-results hidden">
+                        <h3 class="results-title">Найденные математические выражения:</h3>
+                        <div class="extracted-list" id="pdfExtractedList"></div>
+                    </div>
+
+                    <div id="pdfHighlightedContainer" class="highlighted-text-container hidden">
+                        <h3 class="results-title">Текст PDF с подсветкой терминов:</h3>
+                        <div class="highlighted-text" id="pdfHighlightedText"></div>
+                    </div>
+                </section>
+
+                <div id="recommendationsPanel" class="recommendations-container"
+                    style="margin-top: 20px; display: none;">
+                    <div class="extracted-title">🔗 Рекомендации по связям</div>
+                    <div id="recommendationsList" class="extracted-list"></div>
+                </div>
+                <div id="relatedDocumentsPanel" class="info-section hidden" style="margin-top: 30px;">
+                    <div class="extracted-title" id="relatedDocumentsTitle">📄 Связанные документы по терминам </div>
+                    <div id="relatedDocumentsList" class="extracted-list"></div>
+                </div>
+                <section id="editorPanel" class="editor-section hidden" aria-label="Text editor">
+                    <h2 class="section-title">Редактор текста</h2>
+                    <div class="editor-container">
+                        <div class="editor-input-area">
+                            <label class="editor-label">Введите текст для анализа:</label>
+                            <textarea class="editor-textarea" id="manualTextInput"
+                                placeholder="Например: производная экспоненты равна самой себе, интеграл от a до b, сумма от i=1 до n">Производная функции в точке равна пределу отношения приращения функции к приращению аргумента. Интеграл от a до b функции f(x) dx. Экспонента и логарифм являются взаимно обратными функциями.</textarea>
+                            <button class="editor-button" id="analyzeButton">Анализировать текст</button>
+                        </div>
+                        <div class="extracted-content" aria-live="polite">
+                            <div class="extracted-title">Найденные математические выражения:</div>
+                            <div class="extracted-list" id="extractedList"></div>
+                        </div>
+                    </div>
+                    <div class="highlighted-text-container" id="highlightedTextContainer">
+                        <div class="extracted-title">Текст с подсветкой терминов:</div>
+                        <div class="highlighted-text" id="highlightedText"></div>
+                    </div>
+                </section>
+            </div>
+
+            <section id="about" class="info-section">
+                <h2 class="section-title">Что такое семантическая разметка?</h2>
+                <p class="info-text">Семантическая разметка — это процесс привязки фрагментов текста и математических
+                    формул к формальным понятиям из онтологии, то есть структурированной базы знаний. Это превращает
+                    обычный документ в интеллектуальный ресурс, понятный как человеку, так и машине.</p>
+                <p class="info-text">Наш проект решает актуальную задачу: как сделать результаты автоматической
+                    семантической разметки математических PDF-документов не только машино-интерпретируемыми, но и
+                    наглядными, понятными и удобными для неспециалиста, не знакомого с исходным текстом.</p>
+            </section>
+
+            <section id="features" class="features-section">
+                <h2 class="section-title">Что вы получите?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3 class="feature-title">Контекстные пояснения</h3>
+                        <p class="feature-description">Сложные математические понятия получают ясные объяснения,
+                            адаптированные под ваш уровень подготовки</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔗</div>
+                        <h3 class="feature-title">Структурные связи</h3>
+                        <p class="feature-description">Визуализация взаимосвязей между понятиями, теоремами и
+                            доказательствами</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🧭</div>
+                        <h3 class="feature-title">Интеллектуальная навигация</h3>
+                        <p class="feature-description">Быстрый переход к определениям, связанным понятиям и важным
+                            разделам</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="benefits" class="benefits-section">
+                <h2 class="section-title">Почему это важно?</h2>
+                <p class="info-text">Семантическая разметка играет ключевую роль в научной коммуникации: она облегчает
+                    усвоение сложного материала за счет контекстных пояснений, структурных связей и интуитивной
+                    навигации по понятиям.</p>
+                <ul class="benefits-list">
+                    <li><strong>Для студентов:</strong> Быстрее осваивайте новый материал, понимайте связи между
+                        понятиями</li>
+                    <li><strong>Для исследователей:</strong> Анализируйте чужие работы эффективнее, находите релевантные
+                        источники</li>
+                    <li><strong>Для авторов:</strong> Повышайте видимость своих работ в поисковых системах</li>
+                    <li><strong>Для науки:</strong> Ускорение научной коммуникации и уменьшение барьеров в понимании
+                    </li>
+                </ul>
+            </section>
+
+            <section class="info-section">
+                <h2 class="section-title">Основа для интеллектуальных сервисов</h2>
+                <p class="info-text">Разметка лежит в основе современных интеллектуальных сервисов:</p>
+                <div class="features-grid" style="margin-top:20px">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔍</div>
+                        <h3 class="feature-title">Поиск по формулам</h3>
+                        <p class="feature-description">Находите документы по математическим выражениям, а не только по
+                            тексту</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3 class="feature-title">Автоматический референсинг</h3>
+                        <p class="feature-description">Система сама предложит релевантные источники и ссылки</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎓</div>
+                        <h3 class="feature-title">Персонализированное обучение</h3>
+                        <p class="feature-description">Адаптивные образовательные траектории на основе вашего понимания
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contacts" class="contact-section">
+                <h2 class="contact-title">Готовы преобразовать ваши документы?</h2>
+                <p class="contact-text">Присоединяйтесь к проекту Math Sense и откройте новые возможности для работы с
+                    математическими PDF</p>
+                <a href="mailto:contact@mathsense.ru" class="contact-email">contact@mathsense.ru</a>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="ontomathParser.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.top-center a');
+            const sections = document.querySelectorAll('section[id]');
+
+            function updateActiveLink() {
+                let current = '';
+                const scrollPosition = window.scrollY + 150;
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    const href = link.getAttribute('href').substring(1);
+                    if (href === current) link.classList.add('active');
+                });
+            }
+
+            window.addEventListener('scroll', updateActiveLink);
+            updateActiveLink();
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+        });
+
+    </script>
+</body>
+
+</html>
