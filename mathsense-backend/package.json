@@ -18,10 +18,11 @@
   "author": "Math Sense Team",
   "license": "MIT",
   "dependencies": {
-    "express": "^5.2.1",
-    "pg": "^8.11.0",
+    "axios": "^1.16.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "express": "^5.2.1",
+    "pg": "^8.11.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"

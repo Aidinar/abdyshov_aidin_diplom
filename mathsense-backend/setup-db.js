@@ -14,11 +14,8 @@ async function setupDatabase() {
         await client.connect()
         console.log(' Подключено к PostgreSQL')
 
-        // Создаём БД
         await client.query('CREATE DATABASE mathsense')
         console.log(' База данных mathsense создана')
-
-        // Подключаемся к новой БД
         const dbClient = new Client({
             host: process.env.DB_HOST,
             port: process.env.DB_PORT,
