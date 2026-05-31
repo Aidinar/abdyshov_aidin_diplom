@@ -38,7 +38,7 @@ function isWordChar(ch) {
 function highlightTermsInText(text, termsMap) {
     if (!termsMap.size) return escapeHtml(text);
     const sortedTerms = Array.from(termsMap.keys())
-        .filter(term => term.length >= 3)   
+        .filter(term => term.length >= 3)
         .sort((a, b) => b.length - a.length);
     if (sortedTerms.length === 0) return escapeHtml(text);
     const regex = new RegExp(`(${sortedTerms.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'gi');
@@ -249,7 +249,7 @@ if (uploadArea) {
 const analyzeButton = document.getElementById('analyzeButton');
 const editorTextarea = document.getElementById('manualTextInput');
 const extractedList = document.getElementById('extractedList');
-const highlightedTextContainer = document.getElementById('highlightedText'); 
+const highlightedTextContainer = document.getElementById('highlightedText');
 async function analyzeEditorText() {
     const text = editorTextarea.value;
     if (!text.trim()) {
@@ -294,7 +294,7 @@ if (askBtn) {
             llmAnswerText.innerHTML = 'Введите вопрос.';
             return;
         }
-        llmAnswerText.innerHTML = '🤔 Думаю...';
+        llmAnswerText.innerHTML = ' Думаю...';
         try {
             const response = await fetch(`${API_URL}/llm/ask`, {
                 method: 'POST',

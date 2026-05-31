@@ -17,7 +17,7 @@ const pool = new Pool({
     port: parseInt(process.env.DB_PORT) || 5432,
     database: process.env.DB_NAME || 'mathsense',
     user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || 'admin100',
+    password: process.env.DB_PASSWORD || 'aidin100',
     connectionTimeoutMillis: 5000,
 })
 
