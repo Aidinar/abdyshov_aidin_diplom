@@ -9,8 +9,8 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 3001
 
-app.use(cors())                     
-app.use(express.json())             
+app.use(cors())
+app.use(express.json())
 
 const pool = new Pool({
     host: process.env.DB_HOST || 'localhost',
@@ -23,12 +23,12 @@ const pool = new Pool({
 
 let ontologyCache = null
 let ontologyCacheTime = null
-const CACHE_TTL = 5 * 60 * 1000   
+const CACHE_TTL = 5 * 60 * 1000
 
--
-app.get('/api/health', (req, res) => {
-    res.json({ status: 'OK', message: 'Server is running' })
-})
+    -
+    app.get('/api/health', (req, res) => {
+        res.json({ status: 'OK', message: 'Server is running' })
+    })
 
 // --- Онтология из GraphDB ---
 app.get('/api/ontology/terms', async (req, res) => {
@@ -86,6 +86,8 @@ app.get('/api/ontology/terms', async (req, res) => {
         res.status(500).json({ error: 'Не удалось загрузить онтологию из GraphDB' })
     }
 })
+
+
 
 app.post('/api/analyze/save', async (req, res) => {
     const { filename, fileSize, terms } = req.body
